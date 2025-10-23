@@ -1,81 +1,50 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-require_once __DIR__ . '/../models/conexion.php';
-require_once __DIR__ . '/../models/mevi.php';
+ <?php
+require_once("models/mevi.php");
 
-$pdo = (new conexion())->get_conexion();
-$evi = new Evidencia($pdo);
+class cevi {
+    private $modelo;
 
-// Crear evidencia
-if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['update'])) {
-    $idres     = $_POST["idreser"];
-    $desevi    = $_POST["descripcion"];
-    $fecevi    = $_POST["fechevi"];
-    $resp      = $_POST["responsable"];
+    public function __construct() {
+        $this->modelo = new mevi();
+    }
 
-    // Subida de archivo
-    $arcevi = "";
-    if (!empty($_FILES["archivo"]["name"])) {
-        $ruta = "../views/uploads/";
-        if (!is_dir($ruta)) {
-            mkdir($ruta, 0777, true);
+    public function mostrarVista() {
+        $evidencias = $this->modelo->getEvidencias();
+        $mascota = $this->modelo->getMascotas();
+
+        // Generar HTML para las opciones del select
+        $opcionesMascota = '';
+        if (!empty($mascota)) {
+            foreach ($mascota as $m) {
+                $opcionesMascota .= '<option value="' . htmlspecialchars($m['idmasc']) . '">' . htmlspecialchars($m['idmasc']) . ' - ' . htmlspecialchars($m['nommasc']) . '</option>';
+            }
         }
-        $arcevi = basename($_FILES["archivo"]["name"]);
-        move_uploaded_file($_FILES["archivo"]["tmp_name"], $ruta . $arcevi);
-    }
 
-    $tipevi   = $_POST["tipo"];
-    if ($evi->insertar($idres, $tipevi, $arcevi, $desevi, $fecevi, $resp)) {
-        echo "<script>alert('✅ Evidencia guardada con éxito'); window.location='/simba/index.php?pg=1015';</script>";
-    } else {
-        echo "<script>alert('❌ Error al guardar evidencia'); window.location='/simba/index.php?pg=1015';</script>";
-    }
-    exit;
-}
-
-// Eliminar evidencia
-if (isset($_GET['delete'])) {
-    $idevi = intval($_GET['delete']);
-    if ($evi->eliminar($idevi)) {
-        echo "<script>alert('✅ Evidencia eliminada'); window.location='/simba/index.php?pg=1015';</script>";
-    } else {
-        echo "<script>alert('❌ Error al eliminar'); window.location='/simba/index.php?pg=1015';</script>";
-    }
-    exit;
-}
-
-// Actualizar evidencia
-if (isset($_POST['update'])) {
-    $idevi    = $_POST["idevi"];
-    $idres    = $_POST["idreser"];
-    $desevi   = $_POST["descripcion"];
-    $fecevi   = $_POST["fechevi"];
-    $resp     = $_POST["responsable"];
-
-    // Subida de archivo (opcional)
-    $arcevi = $_POST["archivo_actual"] ?? "";
-    if (!empty($_FILES["archivo"]["name"])) {
-        $ruta = "../views/uploads/";
-        if (!is_dir($ruta)) {
-            mkdir($ruta, 0777, true);
+        // Generar HTML para las filas de la tabla de evidencias
+        $filasEvidencias = '';
+        if (!empty($evidencias)) {
+            foreach ($evidencias as $evi) {
+                $filasEvidencias .= '<tr>';
+                $filasEvidencias .= '<td>' . htmlspecialchars($evi['idevid']) . '</td>';
+                $filasEvidencias .= '<td>' . htmlspecialchars($evi['nommasc']) . '</td>';
+                $filasEvidencias .= '<td>' . htmlspecialchars($evi['fechact']) . '</td>';
+                $filasEvidencias .= '<td>' . htmlspecialchars($evi['descripcion']) . '</td>';
+                $filasEvidencias .= '<td>' . htmlspecialchars($evi['fechevi']) . '</td>';
+                $filasEvidencias .= '<td><a href="uploads/' . htmlspecialchars($evi['archivo']) . '" target="_blank" class="btn btn-sm btn-outline-light">Ver</a></td>';
+                $filasEvidencias .= '</tr>';
+            }
+        } else {
+            $filasEvidencias = '<tr><td colspan="7" class="text-center">No hay evidencias registradas.</td></tr>';
         }
-        $arcevi = basename($_FILES["archivo"]["name"]);
-        move_uploaded_file($_FILES["archivo"]["tmp_name"], $ruta . $arcevi);
-    } else {
-        // Si no se sube archivo nuevo, mantener el actual
-        $stmt = $pdo->prepare("SELECT arcevi FROM evidencia WHERE idevi = ?");
-        $stmt->execute([$idevi]);
-        $arcevi = $stmt->fetchColumn();
-    }
 
-    $tipevi   = $_POST["tipo"];
-    if ($evi->actualizar($idevi, $idres, $tipevi, $arcevi, $desevi, $fecevi, $resp)) {
-        echo "<script>alert('✅ Evidencia actualizada'); window.location='/simba/index.php?pg=1015';</script>";
-    } else {
-        echo "<script>alert('❌ Error al actualizar'); window.location='/simba/index.php?pg=1015';</script>";
+        // Cargar la vista y reemplazar los marcadores
+        $vista = file_get_contents("views/vevi.php");
+        $vista = str_replace('<!-- Aquí el controlador debe insertar las opciones de mascotas -->', $opcionesMascota, $vista);
+        $vista = str_replace('<!-- Aquí el controlador debe insertar las filas de la tabla de evidencias -->', $filasEvidencias, $vista);
+        echo $vista;
     }
-    exit;
 }
+
+$controlador = new cevi();
+$controlador->mostrarVista();
 ?>
