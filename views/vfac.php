@@ -2,16 +2,58 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+require_once __DIR__ . '/../models/mini.php';       // UsuarioModel (no se modifica)
+require_once __DIR__ . '/../models/conexion.php';   // clase conexion (usa PDO)
+
+$userData = null;
+
+// Si en sesión está la cédula, usar buscarPorNombre de mini
+if (!empty($_SESSION['cedusu'])) {
+    $um = new UsuarioModel();
+    $userData = $um->buscarPorNombre($_SESSION['cedusu']);
+}
+
+// Si no hay cedula pero sí idusu, obtener datos directo desde la BD
+if (!$userData && !empty($_SESSION['idusu'])) {
+    try {
+        $modelo = new conexion();
+        $pdo = $modelo->get_conexion();
+        $stmt = $pdo->prepare("SELECT idusu, cedusu, nomusu, emausu, telusus, dirusu FROM usuario WHERE idusu = :idusu LIMIT 1");
+        $stmt->execute([':idusu' => $_SESSION['idusu']]);
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    } catch (Exception $e) {
+        $userData = null;
+    }
+}
+
+// Si obtuviste datos, poblar $_SESSION y variables seguras para la vista
+if ($userData) {
+    $_SESSION['idusu']   = $userData['idusu']   ?? $_SESSION['idusu'];
+    $_SESSION['cedusu']  = $userData['cedusu']  ?? $_SESSION['cedusu'];
+    $_SESSION['nomusu']  = $userData['nomusu']  ?? $_SESSION['nomusu'];
+    $_SESSION['emausu']  = $userData['emausu']  ?? $_SESSION['emausu'];
+    $_SESSION['telusus'] = $userData['telusus'] ?? $_SESSION['telusus'];
+    $_SESSION['dirusu']  = $userData['dirusu']  ?? $_SESSION['dirusu'];
+}
+
+$nombre_usuario    = $_SESSION['nomusu']  ?? 'No disponible';
+$email_usuario     = $_SESSION['emausu']  ?? 'No disponible';
+$telefono_usuario  = $_SESSION['telusus'] ?? 'No disponible';
+$direccion_usuario = $_SESSION['dirusu']  ?? 'No disponible';
+
 require "libs/dom/vendor/autoload.php";
 
 use Dompdf\Dompdf;
 
 $dompdf = new Dompdf();
 
-//$nombre_usuario = isset($_SESSION['nomusu']) ? strtoupper($_SESSION['nomusu']) : 'INVITADO';
-//$email_usuario = $_SESSION['emausu'] ?? 'N/A';
-//$telefono_usuario = $_SESSION['telusus'] ?? 'N/A';
-//$direccion_usuario = $_SESSION['dirusu'] ?? 'N/A';
+// Verificar sesión y datos
+if (!isset($_SESSION['idusu'])) {
+    // Redirigir si no hay sesión
+    header('Location: index.php?pg=login');
+    exit;
+}
 
 ob_start();
 ?>
@@ -32,19 +74,20 @@ ob_start();
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.15);
         }
-        h3.text-primary { color: #fd9d0dff; }
+        h3.text-primary { color: #ffc107; }
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-bottom: 1rem;
         }
         .table th, .table td {
             border: 1px solid #dee2e6;
             padding: 8px;
-            text-align: left;
-            vertical-align: middle;
         }
-        .table thead { background: #e9ecef; }
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
         .text-end { text-align: right; }
         .text-center { text-align: center; }
         .mt-4 { margin-top: 1.5rem; }
@@ -54,7 +97,11 @@ ob_start();
         .total {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #fd9d0dff;
+            color: #ffc107;
+        }
+        h5 {
+            color: #ffc107;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -63,14 +110,7 @@ ob_start();
     <!-- Encabezado -->
     <div class="mb-4">
         <div style="float:left; width:50%;">
-            <h3 class="text-primary">SIMBA</h3>
-            <!--<p>Dirección: <?= $_SESSION['dirusu'] ?? 'N/A' ?></p>-->
-            <!-- <p>Tel: <?= $_SESSION['telusus'] ?? 'N/A' ?></p>-->
-            <p><strong>N. De Reserva:</strong> <?= $datOne['idres'] ?></p>
-            <p><strong>Mascota:</strong> <?= $datOne['nommas'] ?></p>
-            <p><strong>Fecha de Reserva:</strong> <?= $datOne['fecact'] ?></p>
-            <p><strong>Cuidador:</strong> <?= $datOne['nomusu'] ?></p>
-            <p><strong>Estado:</strong> <?= $datOne['estres'] ?></p>
+            <h3 class="text-primary" style="font-size:20px;">SIMBA</h3>
         </div>
         <div style="float:right; width:50%; text-align:right;">
             <h5>Factura Nº: <?= $datOne['idres'] ?></h5>
@@ -79,54 +119,79 @@ ob_start();
         <div style="clear:both;"></div>
     </div>
 
-    <!-- Datos cliente -->
-    <!-- <div class="mb-3"> -->
-        <!-- <h5>Cliente</h5> -->
-        <!-- <p><strong>Nombre:</strong> <?= $_SESSION['nomusu'] ?></p> -->
-        <!-- <p><strong>Email:</strong> <?= $_SESSION['emausu'] ?></p> -->
-        <!-- <p><strong>Teléfono:</strong> <?= $_SESSION['telusus'] ?></p> -->
-    <!-- </div> -->
-
-    <!-- Datos reserva -->
-    <!-- <div class="mb-3">
-        <!-- <h5>Reserva</h5> -->
-        <!-- <p><strong>ID Reserva:</strong> <?= $datOne['idres'] ?></p> -->
-        <!-- <p><strong>Mascota:</strong> <?= $datOne['nommas'] ?></p> -->
-        <!-- <p><strong>Fecha de la reserva:</strong> <?= $datOne['fecact'] ?></p> -->
-        <!-- <p><strong>Estado:</strong> <?= $datOne['estres'] ?></p> -->
-    <!-- </div> -->
+    <!-- Datos cliente y reserva en la MISMA tabla -->
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nombre del cliente:</th>
+                <td><?= htmlspecialchars($nombre_usuario) ?></td>
+                <th>N. Reserva:</th>
+                <td><?= htmlspecialchars($datOne['idres'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <th>Correo del cliente:</th>
+                <td><?= htmlspecialchars($email_usuario) ?></td>
+                <th>Cuidador asignado:</th>
+                <td><?= htmlspecialchars($datOne['nomusu'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <th>Teléfono del cliente:</th>
+                <td><?= htmlspecialchars($telefono_usuario) ?></td>
+                <th>Mascota:</th>
+                <td><?= htmlspecialchars($datOne['nommas'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <th>Dirección del cliente:</th>
+                <td><?= htmlspecialchars($direccion_usuario) ?></td>
+                <th>Fecha y hora de la reserva:</th>
+                <td><?= htmlspecialchars($datOne['fecact'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+                <th>Estado:</th>
+                <td><?= htmlspecialchars($datOne['estres'] ?? '-') ?></td>
+            </tr>
+        </tbody>
+    </table>
 
     <!-- Detalle servicios -->
+    <?php
+    // Calcular subtotal a partir de la variable 'preser' de cada servicio
+    $subtotal = 0.0;
+    if (!empty($datOne['servicios']) && is_array($datOne['servicios'])) {
+        foreach ($datOne['servicios'] as $servicio) {
+            // asegurar que preser exista y sea numérico
+            $precio = isset($servicio['preser']) ? floatval($servicio['preser']) : 0.0;
+            $subtotal += $precio;
+        }
+    }
+    ?>
     <table class="table">
         <thead>
             <tr>
                 <th>Servicios</th>
-                <th>Precio Unitario</th>
-                <!-- <th>Cantidad</th> -->
-                <!-- <th>Subtotal</th> -->
+                <th class="text-end">Precio</th>
             </tr>
         </thead>
         <tbody>
-            <?php 
-            $subtotal = 0;
-            foreach($datOne['servicios'] as $serv): 
-                $precio = $serv['precio'] ?? 0;
-                $cantidad = 1; // si siempre es 1, puedes ajustarlo
-                $sub = $precio * $cantidad;
-                $subtotal += $sub;
-            ?>
-            <tr>
-                <td><?= $serv['nomser'] ?></td> 
-                <td>$<?= number_format($precio, 0, ',', '.') ?></td> 
-                <!-- <td><?= $cantidad ?></td> -->
-                <!-- <td>$<?= number_format($sub, 0, ',', '.') ?></td> -->
-            </tr>
-            <?php endforeach; ?>
+            <?php if (!empty($datOne['servicios']) && is_array($datOne['servicios'])): ?>
+                <?php foreach ($datOne['servicios'] as $servicio): ?>
+                <tr>
+                    <td><?= htmlspecialchars($servicio['nomser'] ?? '-') ?></td>
+                    <td class="text-end">$<?= number_format(floatval($servicio['preser'] ?? 0), 0, ',', '.') ?></td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No hay servicios registrados</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
 
     <!-- Resumen -->
-    <?php 
+    <?php
     $iva = $subtotal * 0.19;
     $total = $subtotal + $iva;
     ?>
