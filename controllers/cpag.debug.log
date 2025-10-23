@@ -1,0 +1,3 @@
+2025-10-15 00:22:43 INIT OK via 127.0.0.1:3306
+2025-10-15 00:22:43 ACCION='listar' POST={"accion":"listar"}
+2025-10-15 00:22:43 CASE listar

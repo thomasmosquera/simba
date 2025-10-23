@@ -1,0 +1,224 @@
+#container{
+    width: 100%;
+}
+body {
+    background: #121212;
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+    z-index: 1;
+    color: #CCCCCC;
+}
+.navbar {
+    background-color: #1a1a1a !important;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #FFC107 !important;
+}
+
+.navbar-nav .nav-link {
+    color: #CCCCCC !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #FFC107 !important;
+}
+
+.logo-simba-nav {
+    max-height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid #FFC107;
+}
+
+/* Logo principal*/
+.logo-simba {
+    max-height: 100px;
+    border-radius: 50%;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    border: 3px solid #FFC107;
+    padding: 5px;
+    background-color: #1E1E1E;
+}
+
+/* Tarjetas */
+.card {
+    background-color: #1E1E1E !important;
+    padding: 0px;
+    border: none;
+    border-radius: 0;
+    z-index: 2;
+    margin: 0;
+    position: relative;
+    color: #CCCCCC;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Fondos de tarjetas */
+.card.bg-gradient-action {
+    background: linear-gradient(135deg, #FFC107, #D84315) !important;
+    color: white !important;
+}
+
+.card.bg-gradient-action .card-title {
+    color: white !important;
+}
+
+/* Títulos principales */
+.card-title {
+    color: #FFC107;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Listas dentro de tarjetas*/
+.status-list .list-group-item {
+    background-color: #2a2a2a; 
+    border-color: #3a3a3a;
+    color: #E0E0E0;
+    margin-bottom: 5px; 
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: background-color 0.2s ease;
+}
+
+.status-list .list-group-item:hover {
+    background-color: #333333;
+}
+
+/* Botones principales */
+.btn-warning {
+    background-color: #D84315;
+    border: none;
+    font-weight: bold;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.btn-warning:hover {
+    background-color: #bf360c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Botones de acción rápida */
+.btn-action-outline {
+    border: 2px solid white;
+    color: white;
+    background-color: transparent;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-action-outline:hover {
+    background-color: white;
+    color: #D84315;
+}
+
+/* Inputs */
+input.form-control {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+input.form-control:focus {
+    background-color: #2a2a2a;
+    color: white;
+    border-color: #FFC107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25); 
+}
+/* Textarea */
+textarea.form-control {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+textarea.form-control:focus {
+    background-color: #2a2a2a;
+    color: white;
+    border-color: #FFC107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25); 
+}
+
+/* Etiquetas de formulario */
+.form-label {
+    color: #E0E0E0;
+    font-weight: 500;
+}
+
+/* Íconos dentro de etiquetas*/
+.form-label .fas,
+.card-body p .fas {
+    color: #FFC107;
+}
+
+/* Mensajes */
+.text-muted {
+    font-style: italic;
+    color: #888888 !important;
+}
+
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+    .container {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .logo-simba {
+        max-height: 80px; 
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    h1.display-5 {
+        font-size: 2.2rem; 
+    }
+
+    .card {
+        margin-bottom: 20px; 
+    }
+
+    .card-title {
+        font-size: 1.3rem; 
+    }
+
+    .btn-warning,
+    .btn-action-outline {
+        width: 100%; 
+        padding: 12px 15px;
+    }
+
+    input.form-control {
+        font-size: 0.95rem; 
+        padding: 12px 10px;
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 193, 7, 0.5); 
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 193, 7, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+}
