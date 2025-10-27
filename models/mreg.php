@@ -77,7 +77,7 @@ class Mreg{
                 throw new Exception("El correo {$this->emausu} o la cédula {$this->cedusu} ya están registrados");
             }
 
-            $hash = password_hash($this->contusu, PASSWORD_DEFAULT);
+            $passwordHash = password_hash($this->contusu, PASSWORD_DEFAULT); 
             $sql = "INSERT INTO usuario 
             (nomusu, apeusu, emausu, telusus, dirusu, contusu, cedusu, idper) 
             VALUES (:nomusu, :apeusu, :emausu, :telusus, :dirusu, :contusu, :cedusu, :idper)";
@@ -90,7 +90,7 @@ class Mreg{
             $res->bindParam(":emausu",$this->emausu);
             $res->bindParam(":telusus",$this->telusus);
             $res->bindParam(":dirusu",$this->dirusu);
-            $res->bindParam(":contusu",$hash);
+            $res->bindParam(':contusu', $passwordHash);
             $res->bindParam(":cedusu",$this->cedusu);
             $res->bindParam(":idper",$this->idper);
             $res->execute();
@@ -104,28 +104,66 @@ class Mreg{
 
     public function actu(){
         try{
-            $hash = password_hash($this->contusu, PASSWORD_DEFAULT);
-            $sql = "UPDATE usuario SET 
-                nomusu=:nomusu, apeusu=:apeusu, emausu=:emausu, 
-                telusus=:telusus, dirusu=:dirusu, contusu=:contusu,
-                cedusu=:cedusu, idper=:idper 
-                WHERE idusu=:idusu";
+            // obtener conexión (usa tu método existente)
             $modelo = new conexion();
-            $conexion=$modelo->get_conexion();
-            $res=$conexion->prepare($sql);
-            $res->bindParam(":idusu",$this->idusu);
-            $res->bindParam(":nomusu",$this->nomusu);
-            $res->bindParam(":apeusu",$this->apeusu);
-            $res->bindParam(":emausu",$this->emausu);
-            $res->bindParam(":telusus",$this->telusus);
-            $res->bindParam(":dirusu",$this->dirusu);
-            $res->bindParam(":contusu",$hash);   // ahora sí existe en el SQL
-            $res->bindParam(":cedusu",$this->cedusu);
-            $res->bindParam(":idper",$this->idper);
-            $res->execute();
+            $conexion = $modelo->get_conexion();
+
+            // Si no hay idusu definido en el objeto, fallamos
+            if (empty($this->idusu)) {
+                throw new Exception("Falta idusu para actualizar.");
+            }
+
+            if (empty($this->contusu)) {
+                // Actualizar sin tocar la contraseña
+                $sql = "UPDATE usuario SET 
+                            nomusu = :nomusu,
+                            apeusu = :apeusu,
+                            emausu = :emausu,
+                            telusus = :telusus,
+                            dirusu = :dirusu,
+                            cedusu = :cedusu,
+                            idper = :idper
+                        WHERE idusu = :idusu";
+                $res = $conexion->prepare($sql);
+                $res->bindParam(":nomusu", $this->nomusu);
+                $res->bindParam(":apeusu", $this->apeusu);
+                $res->bindParam(":emausu", $this->emausu);
+                $res->bindParam(":telusus", $this->telusus);
+                $res->bindParam(":dirusu", $this->dirusu);
+                $res->bindParam(":cedusu", $this->cedusu);
+                $res->bindParam(":idper", $this->idper);
+                $res->bindParam(":idusu", $this->idusu);
+                $res->execute();
+            } else {
+                // Actualizar incluyendo nueva contraseña (hasheada)
+                $hash = password_hash($this->contusu, PASSWORD_DEFAULT);
+                $sql = "UPDATE usuario SET 
+                            nomusu = :nomusu,
+                            apeusu = :apeusu,
+                            emausu = :emausu,
+                            telusus = :telusus,
+                            dirusu = :dirusu,
+                            contusu = :contusu,
+                            cedusu = :cedusu,
+                            idper = :idper
+                        WHERE idusu = :idusu";
+                $res = $conexion->prepare($sql);
+                $res->bindParam(":nomusu", $this->nomusu);
+                $res->bindParam(":apeusu", $this->apeusu);
+                $res->bindParam(":emausu", $this->emausu);
+                $res->bindParam(":telusus", $this->telusus);
+                $res->bindParam(":dirusu", $this->dirusu);
+                $res->bindParam(":contusu", $hash);
+                $res->bindParam(":cedusu", $this->cedusu);
+                $res->bindParam(":idper", $this->idper);
+                $res->bindParam(":idusu", $this->idusu);
+                $res->execute();
+            }
+
             return true;
-        }catch (Exception $e) {
-            echo "Error en actu: ".$e->getMessage();
+        } catch (Exception $e) {
+            // Mantén tu manejo de errores (puedes mostrar mensaje o log)
+            echo "Error en actu: " . $e->getMessage();
             return false;
         }
     }
@@ -135,21 +173,38 @@ class Mreg{
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
 
-            // Primero eliminamos las emergencias asociadas al usuario
+            $sqlCheck = "SELECT COUNT(*) AS total FROM evidencia WHERE idusu = :idusu";
+            $check = $conexion->prepare($sqlCheck);
+            $check->bindParam(":idusu", $idusu);
+            $check->execute();
+            $result = $check->fetch(PDO::FETCH_ASSOC);
+
+            if ($result['total'] > 0) {
+                echo "<script>
+                    window.location.href='index.php?pg=1006&msg=No se puede eliminar el usuario porque tiene registros vinculados.';
+                </script>";
+                return false;
+            }
+
             $sql1 = "DELETE FROM emergencia WHERE idusu = :idusu";
             $stmt1 = $conexion->prepare($sql1);
             $stmt1->bindParam(":idusu", $idusu);
             $stmt1->execute();
 
-            // Después eliminamos el usuario
             $sql2 = "DELETE FROM usuario WHERE idusu = :idusu";
             $stmt2 = $conexion->prepare($sql2);
             $stmt2->bindParam(":idusu", $idusu);
             $stmt2->execute();
 
+            echo "<script>
+                window.location.href='index.php?pg=1006&msg=Usuario eliminado correctamente';
+            </script>";
             return true;
+
         } catch (PDOException $e) {
-            echo "Error al eliminar usuario: " . $e->getMessage();
+            echo "<script>
+                window.location.href='index.php?pg=1006&msg=Error al eliminar usuario';
+            </script>";
             return false;
         }
     }
@@ -225,7 +280,7 @@ class Mreg{
             $res->execute();
             return $res->fetch() ? true : false;
         } catch(Exception $e) {
-            echo "Error en duplicCorreoOCedula: ".$e->getMessage();
+            echo "Error en duplicado: ".$e->getMessage();
             return false;
         }
     }
