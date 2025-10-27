@@ -19,7 +19,7 @@ if (!$userData && !empty($_SESSION['idusu'])) {
     try {
         $modelo = new conexion();
         $pdo = $modelo->get_conexion();
-        $stmt = $pdo->prepare("SELECT idusu, cedusu, nomusu, emausu, telusus, dirusu FROM usuario WHERE idusu = :idusu LIMIT 1");
+        $stmt = $pdo->prepare("SELECT idusu, cedusu, nomusu, emausu, telusus, dirusu, apeusu FROM usuario WHERE idusu = :idusu LIMIT 1");
         $stmt->execute([':idusu' => $_SESSION['idusu']]);
         $userData = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     } catch (Exception $e) {
@@ -32,6 +32,7 @@ if ($userData) {
     $_SESSION['idusu']   = $userData['idusu']   ?? $_SESSION['idusu'];
     $_SESSION['cedusu']  = $userData['cedusu']  ?? $_SESSION['cedusu'];
     $_SESSION['nomusu']  = $userData['nomusu']  ?? $_SESSION['nomusu'];
+    $_SESSION['apeusu']  = $userData['apeusu']  ?? $_SESSION['apeusu'];
     $_SESSION['emausu']  = $userData['emausu']  ?? $_SESSION['emausu'];
     $_SESSION['telusus'] = $userData['telusus'] ?? $_SESSION['telusus'];
     $_SESSION['dirusu']  = $userData['dirusu']  ?? $_SESSION['dirusu'];
@@ -39,6 +40,8 @@ if ($userData) {
 
 $nombre_usuario    = $_SESSION['nomusu']  ?? 'No disponible';
 $email_usuario     = $_SESSION['emausu']  ?? 'No disponible';
+$apellido_usuario  = $_SESSION['apeusu']  ?? 'No disponible';
+$cedula_usuario    = $_SESSION['cedusu']  ?? 'No disponible';
 $telefono_usuario  = $_SESSION['telusus'] ?? 'No disponible';
 $direccion_usuario = $_SESSION['dirusu']  ?? 'No disponible';
 
@@ -124,9 +127,15 @@ ob_start();
         <tbody>
             <tr>
                 <th>Nombre del cliente:</th>
-                <td><?= htmlspecialchars($nombre_usuario) ?></td>
+                <td><?= htmlspecialchars($nombre_usuario) ?> <?= htmlspecialchars($apellido_usuario) ?></td>
                 <th>N. Reserva:</th>
                 <td><?= htmlspecialchars($datOne['idres'] ?? '-') ?></td>
+            </tr>
+            <tr>
+                <th>Cedula:</th>
+                <td><?= htmlspecialchars($cedula_usuario) ?></td>
+                <th>Fecha y hora de la reserva:</th>
+                <td><?= htmlspecialchars($datOne['fecact'] ?? '-') ?></td>
             </tr>
             <tr>
                 <th>Correo del cliente:</th>
@@ -143,15 +152,10 @@ ob_start();
             <tr>
                 <th>Dirección del cliente:</th>
                 <td><?= htmlspecialchars($direccion_usuario) ?></td>
-                <th>Fecha y hora de la reserva:</th>
-                <td><?= htmlspecialchars($datOne['fecact'] ?? '-') ?></td>
-            </tr>
-            <tr>
-                <th></th>
-                <td></td>
                 <th>Estado:</th>
                 <td><?= htmlspecialchars($datOne['estres'] ?? '-') ?></td>
             </tr>
+
         </tbody>
     </table>
 
