@@ -1,3 +1,80 @@
-2025-10-15 00:22:43 INIT OK via 127.0.0.1:3306
-2025-10-15 00:22:43 ACCION='listar' POST={"accion":"listar"}
-2025-10-15 00:22:43 CASE listar
+2025-10-24 17:38:50 INIT OK via 127.0.0.1:3306
+2025-10-24 17:38:50 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:38:50 CASE listar
+2025-10-24 17:38:55 INIT OK via 127.0.0.1:3306
+2025-10-24 17:38:55 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:38:55 CASE listar
+2025-10-24 17:50:58 INIT OK via 127.0.0.1:3306
+2025-10-24 17:50:58 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:50:58 CASE listar
+2025-10-24 17:51:00 INIT OK via 127.0.0.1:3306
+2025-10-24 17:51:00 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:51:00 CASE listar
+2025-10-24 17:51:10 INIT OK via 127.0.0.1:3306
+2025-10-24 17:51:10 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:51:10 CASE listar
+2025-10-24 17:53:22 INIT OK via 127.0.0.1:3306
+2025-10-24 17:53:22 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:53:22 CASE listar
+2025-10-24 17:54:24 INIT OK via 127.0.0.1:3306
+2025-10-24 17:54:24 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:54:24 CASE listar
+2025-10-24 17:57:12 INIT OK via 127.0.0.1:3306
+2025-10-24 17:57:12 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:57:12 CASE listar
+2025-10-24 17:57:33 INIT OK via 127.0.0.1:3306
+2025-10-24 17:57:33 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:57:33 CASE listar
+2025-10-24 17:57:36 INIT OK via 127.0.0.1:3306
+2025-10-24 17:57:36 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:57:36 CASE listar
+2025-10-24 17:57:58 INIT OK via 127.0.0.1:3306
+2025-10-24 17:57:58 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:57:58 CASE listar
+2025-10-24 17:58:27 INIT OK via 127.0.0.1:3306
+2025-10-24 17:58:27 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 17:58:27 CASE listar
+2025-10-24 18:03:09 INIT OK via 127.0.0.1:3306
+2025-10-24 18:03:09 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:03:09 CASE listar
+2025-10-24 18:04:29 INIT OK via 127.0.0.1:3306
+2025-10-24 18:04:29 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:04:29 CASE listar
+2025-10-24 18:05:32 INIT OK via 127.0.0.1:3306
+2025-10-24 18:05:32 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:05:32 CASE listar
+2025-10-24 18:05:47 INIT OK via 127.0.0.1:3306
+2025-10-24 18:05:47 ACCION='insertar' POST={"accion":"insertar","idpag":"","nompag":"prueba","rutpag":"vprue.php","mospag":"1"}
+2025-10-24 18:05:47 CASE insertar (inicio)
+2025-10-24 18:05:47 INSERT datos: nom=prueba rut=vprue.php mos=1
+2025-10-24 18:05:47 INSERT ok
+2025-10-24 18:05:47 INIT OK via 127.0.0.1:3306
+2025-10-24 18:05:47 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:05:47 CASE listar
+2025-10-24 18:07:01 INIT OK via 127.0.0.1:3306
+2025-10-24 18:07:01 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:07:01 CASE listar
+2025-10-24 18:07:34 INIT OK via 127.0.0.1:3306
+2025-10-24 18:07:34 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:07:34 CASE listar
+2025-10-24 18:08:07 INIT OK via 127.0.0.1:3306
+2025-10-24 18:08:07 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:08:07 CASE listar
+2025-10-24 18:08:47 INIT OK via 127.0.0.1:3306
+2025-10-24 18:08:47 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:08:47 CASE listar
+2025-10-24 18:35:37 INIT OK via 127.0.0.1:3306
+2025-10-24 18:35:37 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:35:37 CASE listar
+2025-10-24 18:41:28 INIT OK via 127.0.0.1:3306
+2025-10-24 18:41:28 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 18:41:28 CASE listar
+2025-10-24 19:08:14 INIT OK via 127.0.0.1:3306
+2025-10-24 19:08:14 ACCION='listar' POST={"accion":"listar"}
+2025-10-24 19:08:14 CASE listar
+2025-10-26 19:40:58 INIT OK via 127.0.0.1:3306
+2025-10-26 19:40:58 ACCION='listar' POST={"accion":"listar"}
+2025-10-26 19:40:58 CASE listar
+2025-10-26 19:41:32 INIT OK via 127.0.0.1:3306
+2025-10-26 19:41:32 ACCION='listar' POST={"accion":"listar"}
+2025-10-26 19:41:32 CASE listar

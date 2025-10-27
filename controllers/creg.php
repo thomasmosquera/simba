@@ -58,7 +58,7 @@ $mreg->setCedusu($cedusu);
 $mreg->setIdper($idper);
 
 if ($ope == "SavE") {
-     $mreg->setIdusu($idusu);
+    $mreg->setIdusu($idusu);
     $mreg->setNomusu($nomusu);
     $mreg->setApeusu($apeusu);
     $mreg->setEmausu($emausu);
@@ -68,11 +68,11 @@ if ($ope == "SavE") {
     $mreg->setCedusu($cedusu);
     $mreg->setIdper($idper);
     if ($idusu) { 
-        // --- ACTUALIZAR ---
-        $registro_exitoso = $mreg->actu();
-        if (!empty($nomemer) && !empty($telemer)) {
-            $mreg->actuemer($idusu, $nomemer, $telemer);
-        }
+    // --- ACTUALIZAR ---
+    $registro_exitoso = $mreg->actu($idusu); // ✅ ahora le pasamos el ID
+    if (!empty($nomemer) && !empty($telemer)) {
+        $mreg->actuemer($idusu, $nomemer, $telemer);
+    }
     } else {
         // --- NUEVO REGISTRO ---
         // Validar duplicados ANTES de registrar
@@ -110,10 +110,10 @@ if($ope=="del" && $idusu){
 
 // Redirección con mensaje
 if ($registro_exitoso) {
-    echo "<script>window.location.href='http://localhost/prueba/index.php?pg=1006&msg=Usuario registrado correctamente';</script>";
+    echo "<script>window.location.href='http://localhost/simba/index.php?pg=1006&msg=Usuario registrado correctamente';</script>";
     exit;
 } else if($ope == "SavE") { 
-    echo "<script>window.location.href='http://localhost/prueba/index.php?pg=1006&msg=Error al registrar usuario';</script>";
+    echo "<script>window.location.href='http://localhost/simba/index.php?pg=1006&msg=Error al registrar usuario';</script>";
     exit;
 }
 
