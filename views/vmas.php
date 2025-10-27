@@ -25,6 +25,36 @@ if ($editar > 0) {
     $mascotaEditar = $mascotaModel->buscarMascotaPorId($editar);
 }
 ?>
+<style>
+/* 🌙 Estilo oscuro para los select */
+.form-select {
+    background-color: #343a40 !important; /* Fondo oscuro */
+    color: #fff !important; /* Texto blanco */
+    border: 1px solid #555 !important; /* Borde gris oscuro */
+}
+.form-select:focus {
+    background-color: #2c3034 !important;
+    color: #fff !important;
+    border-color: #ffc107 !important; /* Borde amarillo */
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25) !important;
+}
+.form-select option {
+    background-color: #343a40;
+    color: #fff;
+}
+
+/* 🌟 Organización visual: 2 columnas por fila */
+.row.g-3 > div {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+@media (max-width: 768px) {
+    .row.g-3 > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+</style>
 
 <div class="container-fluid px-4 py-5">
     <div class="text-center mb-5">
@@ -40,7 +70,7 @@ if ($editar > 0) {
         </p>
     </div>
 
-    <!-- Mensajes de estado (si llegan desde el controlador) -->
+    <!-- Mensajes de estado -->
     <?php if (isset($_GET['status'])): ?>
         <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
             <i class="fa-solid fa-circle-check me-2"></i>
@@ -66,15 +96,13 @@ if ($editar > 0) {
         <div class="col-12">
             <div class="card bg-secondary text-white shadow-lg p-4">
                 <div class="card-body">
-                    <!-- ! IMPORTANTE: Mantener enctype="multipart/form-data" -->
                     <form method="POST" action="controllers/cmas.php" enctype="multipart/form-data">
                         <input type="hidden" name="accion" value="<?= $mascotaEditar ? 'actualizar' : 'registrar' ?>">
-                        <!-- En el controlador cmas.php, la acción espera 'idmasc' para actualizar/eliminar. -->
                         <input type="hidden" name="idmasc" value="<?= $mascotaEditar['idmas'] ?? '' ?>"> 
                         
                         <div class="row g-3">
                             
-                            <!-- Campo: Enlace a Usuario (idusu) - RELACIÓN MANTENIDA -->
+                            <!-- Usuario -->
                             <div class="col-md-4">
                                 <label for="idusu" class="form-label">Usuario Propietario</label>
                                 <select class="form-select" id="idusu" name="idusu" required>
@@ -95,6 +123,7 @@ if ($editar > 0) {
                                     value="<?= htmlspecialchars($mascotaEditar['nommas'] ?? '') ?>" 
                                     placeholder="Ej: Max" required>
                             </div>
+
                             <!-- Sexo -->
                             <div class="col-md-4">
                                 <label for="sexo" class="form-label">Sexo</label>
@@ -104,49 +133,56 @@ if ($editar > 0) {
                                     <option value="Hembra" <?= (($mascotaEditar['sexmas'] ?? '') == 'Hembra') ? 'selected' : '' ?>>Hembra</option>
                                 </select>
                             </div>
+
                             <!-- Peso -->
                             <div class="col-md-4">
                                 <label for="peso" class="form-label">Peso (kg)</label>
                                 <input type="number" step="0.01" class="form-control" id="peso" name="peso" 
                                     value="<?= htmlspecialchars($mascotaEditar['pesomas'] ?? '') ?>" 
-                                    placeholder="Ej: 5.2 (En Kilogramos)" required>
+                                    placeholder="Ej: 5.2" required>
                             </div>
+
                             <!-- Raza -->
                             <div class="col-md-4">
                                 <label for="raza" class="form-label">Raza</label>
                                 <input type="text" class="form-control" id="raza" name="raza" 
                                     value="<?= htmlspecialchars($mascotaEditar['razamas'] ?? '') ?>" 
-                                    placeholder="Ej: Poodle, Pastor Alemán" required>
+                                    placeholder="Ej: Poodle" required>
                             </div>
+
                             <!-- Edad -->
                             <div class="col-md-4">
                                 <label for="edad" class="form-label">Edad (años)</label>
                                 <input type="number" class="form-control" id="edad" name="edad" 
                                     value="<?= htmlspecialchars($mascotaEditar['edadmas'] ?? '') ?>" 
-                                    placeholder="Ej: 3 (En años)" required>
+                                    placeholder="Ej: 3" required>
                             </div>
+
                             <!-- Tipo -->
                             <div class="col-md-4">
                                 <label for="tipo" class="form-label">Tipo</label>
                                 <input type="text" class="form-control" id="tipo" name="tipo" 
                                     value="<?= htmlspecialchars($mascotaEditar['tipomas'] ?? '') ?>" 
-                                    placeholder="Ej: Perro, Gato, Ave" required>
+                                    placeholder="Ej: Perro, Gato" required>
                             </div>
+
                             <!-- Tamaño -->
                             <div class="col-md-4">
                                 <label for="tamanomasc" class="form-label">Tamaño</label>
                                 <input type="text" class="form-control" id="tamanomasc" name="tamanomasc" 
                                     value="<?= htmlspecialchars($mascotaEditar['tammas'] ?? '') ?>" 
-                                    placeholder="Ej: Pequeño, Mediano, Grande" required>
+                                    placeholder="Ej: Mediano" required>
                             </div>
-                            <!-- Cuidados Especiales -->
+
+                            <!-- Cuidados -->
                             <div class="col-md-4">
                                 <label for="cuiespmasc" class="form-label">Cuidados Especiales</label>
                                 <input type="text" class="form-control" id="cuiespmasc" name="cuiespmasc" 
                                     value="<?= htmlspecialchars($mascotaEditar['cuidmas'] ?? '') ?>" 
-                                    placeholder="Ej: Alergia a granos, Medicación diaria" required>
+                                    placeholder="Ej: Medicación diaria" required>
                             </div>
-                            <!-- Vacunas al Día -->
+
+                            <!-- Vacunas -->
                             <div class="col-md-4">
                                 <label for="vacumasc" class="form-label">Vacunas al Día</label>
                                 <select class="form-select" id="vacumasc" name="vacumasc" required>
@@ -155,69 +191,36 @@ if ($editar > 0) {
                                     <option value="No" <?= (($mascotaEditar['vacmas'] ?? '') == 'No') ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
-                            
-                            <!-- ---------------------------------------------------- -->
-                            <!-- SECCIÓN DE SUBIDA DE ARCHIVOS (CON PLACEHOLDERS) -->
-                            <!-- ---------------------------------------------------- -->
+
+                            <!-- Archivos -->
                             <div class="col-md-6">
                                 <label for="imagen" class="form-label">Foto de la Mascota</label>
                                 <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" onchange="previewImage('imagen', 'fotoPreview')">
-                                <p class="text-light small mt-1">Sube una foto de perfil de tu mascota (JPG, PNG).</p>
-                                
+                                <p class="text-light small mt-1">Sube una foto de perfil (JPG, PNG).</p>
                                 <div class="mt-2 text-center">
                                     <?php 
                                     $fotoPath = $mascotaEditar['fotmas'] ?? '';
-                                    // Muestra el placeholder si no hay foto actual
                                     $fotoSrc = !empty($fotoPath) ? 'controllers/../' . htmlspecialchars($fotoPath) : 'https://placehold.co/80x80/000/fff?text=Foto';
                                     ?>
-                                    <!-- La imagen se previsualiza. Usa Placeholder. -->
-                                    <img id="fotoPreview" 
-                                         src="<?= $fotoSrc ?>" 
-                                         alt="Previsualización Foto" 
-                                         class="img-thumbnail" 
-                                         style="max-width: 100px; max-height: 100px; display: block; margin: 0 auto;">
+                                    <img id="fotoPreview" src="<?= $fotoSrc ?>" class="img-thumbnail" style="max-width:100px;max-height:100px;">
                                 </div>
-                                <?php if ($fotoPath): ?>
-                                    <!-- Conserva el path actual si no se sube uno nuevo -->
-                                    <input type="hidden" name="fotomasc_actual" value="<?= htmlspecialchars($fotoPath) ?>">
-                                    <p class="text-light small text-center mt-1">Foto actual: <?= basename($fotoPath) ?></p>
-                                <?php endif; ?>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="carnetmasc" class="form-label">Carnet de Vacunación</label>
                                 <input type="file" class="form-control" id="carnetmasc" name="carnetmasc" accept="image/*, application/pdf" onchange="previewImage('carnetmasc', 'carnetPreview')">
-                                <p class="text-light small mt-1">Sube el carnet de vacunación (JPG, PNG, PDF).</p>
-                                
+                                <p class="text-light small mt-1">Sube el carnet (JPG, PNG, PDF).</p>
                                 <div class="mt-2 text-center">
                                     <?php 
                                     $carnetPath = $mascotaEditar['carmas'] ?? '';
-                                    // Verifica si el archivo actual es una imagen para mostrarla. Si no, muestra el placeholder.
-                                    $isCarnetImage = $carnetPath && (strpos($carnetPath, '.jpg') !== false || strpos($carnetPath, '.png') !== false || strpos($carnetPath, '.jpeg') !== false);
-                                    
-                                    if ($carnetPath && $isCarnetImage): 
-                                        $carnetSrc = 'controllers/../' . htmlspecialchars($carnetPath); 
-                                    else:
-                                        // Usa placeholder si no hay carnet o si es PDF (no visible en img tag)
-                                        $carnetSrc = 'https://placehold.co/80x80/000/fff?text=Carnet';
-                                    endif;
+                                    $isCarnetImage = $carnetPath && preg_match('/\.(jpg|jpeg|png)$/i', $carnetPath);
+                                    $carnetSrc = $isCarnetImage ? 'controllers/../' . htmlspecialchars($carnetPath) : 'https://placehold.co/80x80/000/fff?text=Carnet';
                                     ?>
-                                    <img id="carnetPreview" src="<?= $carnetSrc ?>" 
-                                         alt="Previsualización Carnet" 
-                                         class="img-thumbnail" 
-                                         style="max-width: 100px; max-height: 100px; display: block; margin: 0 auto;">
-                                    <?php if ($carnetPath && !$isCarnetImage): ?>
-                                        <p class="text-light small mt-1"><i class="fas fa-file-pdf"></i> Archivo PDF subido</p>
-                                    <?php endif; ?>
+                                    <img id="carnetPreview" src="<?= $carnetSrc ?>" class="img-thumbnail" style="max-width:100px;max-height:100px;">
                                 </div>
-                                <?php if ($carnetPath): ?>
-                                    <!-- Conserva el path actual si no se sube uno nuevo -->
-                                    <input type="hidden" name="carnetmasc_actual" value="<?= htmlspecialchars($carnetPath) ?>">
-                                    <p class="text-light small text-center mt-1">Carnet actual: <?= basename($carnetPath) ?></p>
-                                <?php endif; ?>
                             </div>
-                            <!-- ---------------------------------------------------- -->
 
+                            <!-- Botones -->
                             <div class="col-12 mt-4 text-center">
                                 <button type="submit" class="btn btn-warning btn-lg shadow">
                                     <i class="fas fa-save"></i> <?= $mascotaEditar ? 'Actualizar Mascota' : 'Registrar Mascota' ?>
@@ -235,9 +238,99 @@ if ($editar > 0) {
         </div>
     </div>
 
-    <!-- Sección de Listado de Mascotas (CON FOTO Y CARNET EN LA TABLA) -->
-    <h2 class="text-center fw-bold text-dark mb-4">Mascotas Registradas</h2>
+    <!-- Tabla -->
 
+    <div class="row">
+        <div class="col-12">
+           
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <!-- Tu tabla completa se mantiene igual -->
+                        <!-- ... -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Listado de Mascotas (CON FOTO Y CARNET EN LA TABLA) -->
+<h2 class="text-center fw-bold text-white mb-4">🐾 Mascotas Registradas</h2>
+
+<style>
+/* 🎨 Fondo gris oscuro igual al módulo superior */
+.listado-mascotas {
+    background-color: #2b2b2b; /* Gris oscuro */
+    color: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.listado-mascotas .card {
+    background-color: #343a40; /* Gris un poco más claro dentro */
+    border: none;
+    border-radius: 0.8rem;
+}
+
+.listado-mascotas .table {
+    color: #fff;
+}
+
+.listado-mascotas .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.listado-mascotas .table-hover tbody tr:hover {
+    background-color: rgba(255, 193, 7, 0.1);
+}
+
+.listado-mascotas .table-dark th {
+    background-color: #212529 !important;
+}
+
+.listado-mascotas .btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.listado-mascotas .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.listado-mascotas .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.listado-mascotas .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* 💥 FORZAR modo oscuro total en toda la tabla */
+.listado-mascotas .table,
+.listado-mascotas .table tbody,
+.listado-mascotas .table td,
+.listado-mascotas .table tr {
+    background-color: #2b2b2b !important;
+    color: #fff !important;
+    border-color: #3a3a3a !important;
+}
+
+/* Rayado oscuro */
+.listado-mascotas .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #242424 !important;
+}
+
+/* Hover dorado translúcido */
+.listado-mascotas .table-hover tbody tr:hover {
+    background-color: rgba(255, 193, 7, 0.15) !important;
+}
+</style>
+
+<div class="listado-mascotas">
     <div class="row">
         <div class="col-12">
             <div class="card shadow-lg p-3">
@@ -247,12 +340,12 @@ if ($editar > 0) {
                             <thead class="table-dark">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Foto</th> <!-- Columna de foto -->
+                                    <th>Foto</th>
                                     <th>Propietario</th>
                                     <th>Nombre</th>
                                     <th>Tipo</th>
                                     <th>Raza</th>
-                                    <th>Carnet</th> <!-- Columna de carnet -->
+                                    <th>Carnet</th>
                                     <th>Vacunas</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -263,22 +356,18 @@ if ($editar > 0) {
                                         <tr>
                                             <td class="align-middle"><?= $m['idmas'] ?></td>
                                             
-                                            <!-- Columna Foto -->
                                             <td class="align-middle text-center">
                                                 <?php 
-                                                // La ruta necesita subir dos niveles (../controllers/../uploads...)
                                                 $fotoSrcList = !empty($m['fotmas']) ? 'controllers/../' . htmlspecialchars($m['fotmas']) : 'https://placehold.co/50x50/eee/333?text=N/A';
                                                 ?>
                                                 <img src="<?= $fotoSrcList ?>" alt="Foto" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                                             </td>
 
-                                            <!-- Mostrar Nombre de Usuario (nomusu viene de la unión en el modelo, si está implementada) -->
                                             <td class="align-middle"><?= htmlspecialchars($m['nomusu'] ?? 'N/A') ?></td> 
                                             <td class="align-middle"><?= htmlspecialchars($m['nommas']) ?></td>
                                             <td class="align-middle"><?= htmlspecialchars($m['tipomas']) ?></td>
                                             <td class="align-middle"><?= htmlspecialchars($m['razamas']) ?></td>
                                             
-                                            <!-- Columna Carnet -->
                                             <td class="align-middle text-center">
                                                 <?php if (!empty($m['carmas'])): ?>
                                                     <?php
@@ -289,7 +378,7 @@ if ($editar > 0) {
                                                         <a href="<?= $carnetPathList ?>" target="_blank" title="Ver Carnet">
                                                             <i class="fas fa-image fa-2x text-info"></i>
                                                         </a>
-                                                    <?php else: // Asume PDF u otro archivo no imagen ?>
+                                                    <?php else: ?>
                                                         <a href="<?= $carnetPathList ?>" target="_blank" title="Descargar Carnet">
                                                             <i class="fas fa-file-pdf fa-2x text-danger"></i>
                                                         </a>
@@ -301,16 +390,14 @@ if ($editar > 0) {
 
                                             <td class="align-middle"><?= htmlspecialchars($m['vacmas']) ?></td>
                                             
-                                            <!-- Acciones -->
                                             <td class="align-middle">
                                                 <a href="index.php?pg=1009&editar=<?= $m['idmas'] ?>" 
                                                    class="btn btn-outline-warning btn-sm me-1">
                                                     <i class="fas fa-edit"></i> Editar
                                                 </a>
-                                                <!-- FORMULARIO DE ELIMINACIÓN CON POST Y idmasc -->
+
                                                 <form method="POST" action="controllers/cmas.php" style="display:inline-block;">
                                                     <input type="hidden" name="accion" value="eliminar">
-                                                    <!-- Es CRUCIAL que se llame 'idmasc' para el controlador -->
                                                     <input type="hidden" name="idmasc" value="<?= $m['idmas'] ?>"> 
                                                     <button type="submit" class="btn btn-outline-danger btn-sm" 
                                                             onclick="return confirm('¿Seguro que deseas eliminar la mascota <?= htmlspecialchars($m['nommas']) ?>?');">
@@ -332,48 +419,36 @@ if ($editar > 0) {
     </div>
 </div>
 
-<!-- Scripts de JavaScript para la previsualización de imágenes (Necesario para los placeholders del formulario) -->
+<!-- Scripts para previsualización de imágenes -->
 <script>
-    // Función para previsualizar la imagen seleccionada
-    function previewImage(input_id, preview_id) {
-        const input = document.getElementById(input_id);
-        const preview = document.getElementById(preview_id);
-        
-        // Define las fuentes placeholder
-        const placeholderFoto = 'https://placehold.co/80x80/000/fff?text=Foto';
-        const placeholderCarnet = 'https://placehold.co/80x80/000/fff?text=Carnet';
-        const isFotoInput = input_id === 'imagen';
+function previewImage(input_id, preview_id) {
+    const input = document.getElementById(input_id);
+    const preview = document.getElementById(preview_id);
+    
+    const placeholderFoto = 'https://placehold.co/80x80/000/fff?text=Foto';
+    const placeholderCarnet = 'https://placehold.co/80x80/000/fff?text=Carnet';
+    const isFotoInput = input_id === 'imagen';
+    const defaultPlaceholder = isFotoInput ? placeholderFoto : placeholderCarnet;
 
-        // Determina la fuente placeholder a usar
-        const defaultPlaceholder = isFotoInput ? placeholderFoto : placeholderCarnet;
-
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            
-            // Solo previsualiza si es una imagen
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            } else {
-                // Si no es imagen (ej: PDF), muestra el placeholder genérico
-                preview.src = defaultPlaceholder; 
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
             }
+            reader.readAsDataURL(file);
         } else {
-            // Si no hay archivos en el input, restaura el placeholder.
-            // Nota: El src original se establece en PHP al cargar la página si hay una imagen.
-            // Si el usuario limpia el campo de archivo, volvemos al placeholder por defecto si no hay ruta actual.
-            const fotoActual = document.querySelector('input[name="fotomasc_actual"]')?.value;
-            const carnetActual = document.querySelector('input[name="carnetmasc_actual"]')?.value;
-            
-            if (isFotoInput && !fotoActual) {
-                preview.src = defaultPlaceholder;
-            } else if (!isFotoInput && !carnetActual) {
-                preview.src = defaultPlaceholder;
-            }
-            // Si hay una ruta actual, el preview se mantendrá.
+            preview.src = defaultPlaceholder; 
+        }
+    } else {
+        const fotoActual = document.querySelector('input[name="fotomasc_actual"]')?.value;
+        const carnetActual = document.querySelector('input[name="carnetmasc_actual"]')?.value;
+        if (isFotoInput && !fotoActual) {
+            preview.src = defaultPlaceholder;
+        } else if (!isFotoInput && !carnetActual) {
+            preview.src = defaultPlaceholder;
         }
     }
+}
 </script>

@@ -57,8 +57,8 @@
 
                     <div class="mb-3">
                         <label for="pgini" class="form-label">Página inicial del perfil (ID de página)</label>
-                        <input type="number" id="pgini" name="pgini" class="form-control" 
-                               value="<?= $edit_pgini ?>" placeholder="1001, 1002, 1003..." required>
+                   <input type="number" id="pgini" name="pgini" class="form-control" min="1" step="1" 
+                       value="<?= $edit_pgini ?>" placeholder="1001, 1002, 1003..." required>
                     </div>
 
                     <button class="btn btn-warning"><?= $is_edit ? 'Actualizar perfil' : 'Crear perfil' ?></button>
@@ -67,25 +67,9 @@
                     <?php endif; ?>
                     
                     <?php if (!empty($alerta)): ?>
-                        <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg" 
-                            role="alert" 
-                            style="z-index: 2000; min-width: 350px;">
-                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                            <?= htmlspecialchars($alerta) ?>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="alert alert-danger mt-4 text-center">
+                            <?= $alerta ?>
                         </div>
-
-                        <script>
-                            // Cierre automático en 4 segundos
-                            setTimeout(() => {
-                                const alert = document.querySelector('.alert');
-                                if (alert) {
-                                    alert.classList.remove('show');
-                                    alert.classList.add('fade');
-                                    setTimeout(() => alert.remove(), 500);
-                                }
-                            }, 4000);
-                        </script>
                     <?php endif; ?>
                 </form>
             </div>

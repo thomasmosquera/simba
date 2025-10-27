@@ -88,12 +88,31 @@ window.addEventListener("DOMContentLoaded", () => {
 
                             <div class="col-md-6">
                                 <label class="form-label">Cédula</label>
-                                <input type="text" name="cedusu" value="<?= $datos['cedusu'] ?? '' ?>" class="form-control" placeholder="1111111111" pattern="[0-9]{8,10}" title="La cédula debe tener entre 8 y 10 dígitos" required>
+                                <input type="text" name="cedusu" value="<?= $datos['cedusu'] ?? '' ?>" class="form-control" placeholder="1070905060" pattern="[0-9]{8,10}" title="La cédula debe tener entre 8 y 10 dígitos" required>
                             </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Contraseña</label>
-                                <input type="password" name="contusu" class="form-control" placeholder="Mínimo 8 caracteres, incluye Mayús y número" pattern="^(?=.*[A-Z])(?=.*[0-9]).{8,}$" title="Mínimo 8 caracteres, al menos una mayúscula y un número" required>
+                            <div class="col-md-6 mb-3 position-relative">
+                                <label for="contusu" class="form-label" id="labelPassword">Contraseña</label>
+                                <div style="position: relative;">
+                                    <input type="password" name="contusu" id="contusu" 
+                                        class="form-control" 
+                                        placeholder="Mínimo 8 caracteres, incluye mayúscula y número" 
+                                        style="padding-right: 45px; height: 40px;">
+                                    <button type="button" id="togglePassword" 
+                                            style="position: absolute;
+                                                right: 10px;
+                                                top: 0;
+                                                height: 100%;
+                                                width: 40px;
+                                                border: none;
+                                                background: none;
+                                                cursor: pointer;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                        <i class="fa fa-eye" id="eyeIcon" style="font-size: 18px; color: #FFC107;"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="col-md-6">
@@ -109,8 +128,8 @@ window.addEventListener("DOMContentLoaded", () => {
                                 </select>
                             </div>
 
-                            <h5 class="card-title mb-3">
-                                <i class="fas fa-user-friends me-2"></i> Contacto de Emergencia
+                            <h5 class="card-title mb-3" style="margin: 9px">
+                                <i class="fas fa-user-friends me-2"></i> Contacto de Emergencia (Opcional)
                             </h5>
                             <hr class="text-white">
 
@@ -131,6 +150,8 @@ window.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     </div>
+
+
 
     <div class="card bg-secondary text-white shadow-lg p-4 mt-4">
         <div class="card-body">
@@ -181,4 +202,44 @@ window.addEventListener("DOMContentLoaded", () => {
             </table>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const passwordInput = document.getElementById("contusu");
+            const toggleButton = document.getElementById("togglePassword");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            // 🔹 Evitar que el botón recargue el formulario
+            toggleButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    eyeIcon.classList.remove("fa-eye");
+                    eyeIcon.classList.add("fa-eye-slash");
+                    eyeIcon.style.color = "#dc3545";
+                } else {
+                    passwordInput.type = "password";
+                    eyeIcon.classList.remove("fa-eye-slash");
+                    eyeIcon.classList.add("fa-eye");
+                    eyeIcon.style.color = "#FFC107";
+                }
+            });
+
+            // 🔹 Mostrar mensaje solo al editar
+            const params = new URLSearchParams(window.location.search);
+            const operacion = params.get("ope");
+            if (operacion === "edit") {
+                const label = document.getElementById("labelPassword");
+                if (label) {
+                    const aviso = document.createElement("small");
+                    aviso.textContent = " (solo llena este campo si deseas cambiar la contraseña)";
+                    aviso.style.color = "#FFC107";
+                    aviso.style.fontWeight = "normal";
+                    aviso.style.fontSize = "0.9em";
+                    label.appendChild(aviso);
+                }
+            }
+        });
+    </script>
 </div>

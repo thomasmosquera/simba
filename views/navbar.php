@@ -1,5 +1,5 @@
- <?php
-  // Define BASE_PATH si no está definido (para conexiones a BD)
+<?php
+// Define BASE_PATH si no está definido (para conexiones a BD)
 if (!defined('BASE_PATH')) {
     define('BASE_PATH', __DIR__ . '/../'); // Ajusta la ruta según la ubicación de tu index.php
 }
