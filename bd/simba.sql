@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-10-2025 a las 17:33:17
+-- Tiempo de generación: 26-10-2025 a las 19:49:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -34,6 +34,18 @@ CREATE TABLE `emergencia` (
   `telemer` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `emergencia`
+--
+
+INSERT INTO `emergencia` (`idemer`, `idusu`, `nomemer`, `telemer`) VALUES
+(2, 8, 'Brayan Lopez', '3214079456'),
+(3, 9, 'Roque', '3108627688'),
+(4, 10, 'Thomas', '3168820833'),
+(5, 11, 'Yilbert', '3232872968'),
+(6, 12, 'Mayra Cuchumbe', '3208091583'),
+(7, 13, 'Alberto', '1111111111');
+
 -- --------------------------------------------------------
 
 --
@@ -46,7 +58,9 @@ CREATE TABLE `evidencia` (
   `idusu` bigint(11) DEFAULT NULL,
   `arcevi` varchar(255) DEFAULT NULL,
   `desevi` varchar(500) DEFAULT NULL,
-  `fecevi` datetime DEFAULT NULL
+  `fecevi` datetime DEFAULT NULL,
+  `resp` varchar(100) DEFAULT NULL,
+  `tipevi` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -70,6 +84,13 @@ CREATE TABLE `mascota` (
   `carmas` varchar(500) DEFAULT NULL,
   `fotmas` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `mascota`
+--
+
+INSERT INTO `mascota` (`idmas`, `idusu`, `nommas`, `sexmas`, `pesomas`, `razamas`, `edadmas`, `tipomas`, `tammas`, `cuidmas`, `vacmas`, `carmas`, `fotmas`) VALUES
+(1, 6, 'Tobi', 'Macho', 124.00, 'Pastor', 25, 'Foto', 12.00, '123', 'Si', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -102,7 +123,7 @@ CREATE TABLE `pagina` (
 --
 
 INSERT INTO `pagina` (`idpag`, `nompag`, `rutpag`, `mospag`) VALUES
-(1, 'Prueba', 'vpag.php', 1);
+(1, 'prueba', 'vprue.php', 1);
 
 -- --------------------------------------------------------
 
@@ -124,7 +145,10 @@ CREATE TABLE `perfil` (
 --
 
 INSERT INTO `perfil` (`idper`, `nomper`, `pgini`, `insper`, `updper`, `delper`) VALUES
-(1, 'Administrador', 1, 1, 1, 1);
+(1, 'Administrador', 1, 1, 1, 1),
+(2, 'Cuidador', 0, 0, 0, 0),
+(3, 'Cliente', 0, 0, 0, 0),
+(4, 'Desarrollador', 1001, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -157,7 +181,7 @@ CREATE TABLE `reserva` (
 --
 
 INSERT INTO `reserva` (`idres`, `idusu`, `idmas`, `fecact`, `estres`) VALUES
-(1, NULL, NULL, '2025-10-06 10:31:00', 'Inactivo');
+(2, 13, 1, '0000-00-00 00:00:00', 'Activo');
 
 -- --------------------------------------------------------
 
@@ -171,6 +195,15 @@ CREATE TABLE `serres` (
   `idser` bigint(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `serres`
+--
+
+INSERT INTO `serres` (`idserres`, `idres`, `idser`) VALUES
+(1, 2, 1),
+(2, 2, 2),
+(3, 2, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -183,6 +216,18 @@ CREATE TABLE `servicio` (
   `preser` decimal(5,3) DEFAULT NULL,
   `descser` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicio`
+--
+
+INSERT INTO `servicio` (`idser`, `nomser`, `preser`, `descser`) VALUES
+(1, 'Baño básico', 99.999, 'Baño con agua tibia y shampoo antipulgas, secado con toalla y cepillado general. Ideal para mantener la higiene de la mascota.'),
+(2, 'Baño + Corte de uñas', 40.000, 'Incluye baño completo, limpieza de orejas, secado con aire y corte de uñas con cuidado especializado.'),
+(3, 'Baño premium con peinado', 60.000, 'Servicio completo con shampoo dermatológico, secado profesional, peinado y perfume hipoalergénico.'),
+(4, 'Guardería por día', 45.000, 'Cuidado diurno de la mascota en un entorno seguro, con juegos, alimentación y socialización.'),
+(5, 'Paquete de guardería (5 días)', 99.999, 'Paquete semanal de 5 días de guardería con actividades recreativas, alimentación y monitoreo fotográfico diario a través de la plataforma SIMBA.'),
+(6, 'Spa relajante', 70.000, 'Baño con aromaterapia, masaje antiestrés y cepillado profundo. Ideal para mascotas que necesitan relajación.');
 
 -- --------------------------------------------------------
 
@@ -207,8 +252,13 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idusu`, `idper`, `nomusu`, `apeusu`, `emausu`, `telusus`, `dirusu`, `contusu`, `cedusu`) VALUES
-(5, 1, 'Juan', 'Pérez', 'juanperez@example.com', '3001234567', 'Calle 123 #45-67', '$2y$10$WLoChgqGXRjMWJno/5.xe.RuDhZrBas0Acs3XrabOj9jGj8.hu8hO', '1100'),
-(6, 1, 'brayan', 'lopez', 'dlopezespinosa04@gmail.com', '3214079456', 'Calle 123 #45-67', '$2y$10$dj5yQnJ4xEdSTP8p3WQvROpBHbDPqdjLtzjhJv//h/87/eGSBOh6e', '1072643902');
+(6, 1, 'Brayan', 'Lopez', 'dlopezespinosa04@gmail.com', '3214079456', 'Calle 123 #45-67', '$2y$10$beQtoBvbJLh3heXSbjEtAuLVHsrW93IwIpj.hwSFnyX1sr286kh02', '1072643902'),
+(8, 1, 'juan', 'perez', 'juanprueba@prueba.com', '0000000000', 'casasd', '$2y$10$XB8VCl/SAPHvwsEorApnleT.a/0hzrOu0cLeKHeD.iEbz/PcG/4Ti', '00000000'),
+(9, 1, 'Roque', 'Galeano', 'roquegaleano301@gmail.com', '3108627688', 'CRA 10A 10-34', '$2y$10$CNElFWA2hmg4AxWgE/nFou6OC3KSSUDvzb7pnHbnIVCUzWHZyI/j.', '1072643266'),
+(10, 1, 'Thomas', 'Mosquera', 'thomasmosquerapedrazaa@gmail.com', '3168820833', 'Calle 13 #5-02', '$2y$10$4rqEF9h3oZ2y5jsQYi/CNejzkKJx7487fEVc.8YbEQ3TIPHypD5Wm', '1032938133'),
+(11, 1, 'Yilbert', 'Jimenez', 'yilbertprog21@gmail.com', '3232872968', 'Calle 123', '$2y$10$tQf325C7j1/n.fqzYSzwNOXrDqgRoIU1.cFLslcsr72dOgwPZ/ETG', '1076737473'),
+(12, 1, ' Mayra', 'Cuchumbe', 'malexacc10@gmail.com', '3208091583', 'Madrid, Cundinamarca ', '$2y$10$ZhUeFFBv2F2en3x2Y5ASmuSqq1JLyXZptBkwTxu7HgChwKRBLm6mi', '1007155164'),
+(13, 2, 'Alberto', 'Rodriguez', 'alberto.cuidador@gmai.com', '1111111111', 'AAAAAAAA', '$2y$10$WGGWiXuXlMkOjX3T2EgH9uC3n8oJL1AfEmGkUXzFuesA9vTp6lzDO', '00000001');
 
 -- --------------------------------------------------------
 
@@ -301,8 +351,6 @@ ALTER TABLE `servicio`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`idusu`),
-  ADD UNIQUE KEY `emausu` (`emausu`),
-  ADD UNIQUE KEY `cedusu` (`cedusu`),
   ADD KEY `fkuspr` (`idper`);
 
 --
@@ -321,7 +369,7 @@ ALTER TABLE `usunot`
 -- AUTO_INCREMENT de la tabla `emergencia`
 --
 ALTER TABLE `emergencia`
-  MODIFY `idemer` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idemer` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `evidencia`
@@ -333,7 +381,7 @@ ALTER TABLE `evidencia`
 -- AUTO_INCREMENT de la tabla `mascota`
 --
 ALTER TABLE `mascota`
-  MODIFY `idmas` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idmas` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `notificacion`
@@ -351,7 +399,7 @@ ALTER TABLE `pagina`
 -- AUTO_INCREMENT de la tabla `perfil`
 --
 ALTER TABLE `perfil`
-  MODIFY `idper` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idper` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `pxp`
@@ -363,25 +411,25 @@ ALTER TABLE `pxp`
 -- AUTO_INCREMENT de la tabla `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `idres` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idres` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `serres`
 --
 ALTER TABLE `serres`
-  MODIFY `idserres` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idserres` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `idser` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idser` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusu` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idusu` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `usunot`
