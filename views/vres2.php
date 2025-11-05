@@ -9,6 +9,10 @@ $datServiciosSeleccionados = [];
 if($esEdicion && $datOne){
     $datServiciosSeleccionados = array_column($datOne['servicios'], 'idser');
 }
+
+// Limites de fecha: desde hoy hasta +3 meses
+$minFecha = date('Y-m-d\TH:i');
+$maxFecha = date('Y-m-d\TH:i', strtotime('+3 months'));
 ?>
 
 <div class="container-fluid px-4 py-5">
@@ -49,7 +53,8 @@ if($esEdicion && $datOne){
                 <div class="mb-3">
                     <label for="fecha" class="form-label">Fecha y hora</label>
                     <input type="datetime-local" id="fecha" name="fecact" class="form-control"
-                        value="<?= $esEdicion ? date('Y-m-d\TH:i', strtotime($datOne['fecact'])) : '' ?>">
+                        min="<?= $minFecha ?>" max="<?= $maxFecha ?>"
+                        value="<?= $esEdicion ? date('Y-m-d\TH:i', strtotime($datOne['fecact'])) : $minFecha ?>">
                 </div>
 
                 <!-- Servicios (multiple) -->
