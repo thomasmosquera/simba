@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2025 a las 19:49:59
+-- Tiempo de generación: 03-11-2025 a las 22:49:02
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -44,7 +44,8 @@ INSERT INTO `emergencia` (`idemer`, `idusu`, `nomemer`, `telemer`) VALUES
 (4, 10, 'Thomas', '3168820833'),
 (5, 11, 'Yilbert', '3232872968'),
 (6, 12, 'Mayra Cuchumbe', '3208091583'),
-(7, 13, 'Alberto', '1111111111');
+(7, 13, 'Alberto', '1111111111'),
+(8, 14, 'Brayan Lopez', '3214079456');
 
 -- --------------------------------------------------------
 
@@ -213,7 +214,7 @@ INSERT INTO `serres` (`idserres`, `idres`, `idser`) VALUES
 CREATE TABLE `servicio` (
   `idser` bigint(11) NOT NULL,
   `nomser` varchar(255) DEFAULT NULL,
-  `preser` decimal(5,3) DEFAULT NULL,
+  `preser` decimal(10,2) DEFAULT NULL,
   `descser` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -222,12 +223,13 @@ CREATE TABLE `servicio` (
 --
 
 INSERT INTO `servicio` (`idser`, `nomser`, `preser`, `descser`) VALUES
-(1, 'Baño básico', 99.999, 'Baño con agua tibia y shampoo antipulgas, secado con toalla y cepillado general. Ideal para mantener la higiene de la mascota.'),
-(2, 'Baño + Corte de uñas', 40.000, 'Incluye baño completo, limpieza de orejas, secado con aire y corte de uñas con cuidado especializado.'),
-(3, 'Baño premium con peinado', 60.000, 'Servicio completo con shampoo dermatológico, secado profesional, peinado y perfume hipoalergénico.'),
-(4, 'Guardería por día', 45.000, 'Cuidado diurno de la mascota en un entorno seguro, con juegos, alimentación y socialización.'),
-(5, 'Paquete de guardería (5 días)', 99.999, 'Paquete semanal de 5 días de guardería con actividades recreativas, alimentación y monitoreo fotográfico diario a través de la plataforma SIMBA.'),
-(6, 'Spa relajante', 70.000, 'Baño con aromaterapia, masaje antiestrés y cepillado profundo. Ideal para mascotas que necesitan relajación.');
+(1, 'Baño básico', 100.00, 'Baño con agua tibia y shampoo antipulgas, secado con toalla y cepillado general. Ideal para mantener la higiene de la mascota.'),
+(2, 'Baño + Corte de uñas', 40.00, 'Incluye baño completo, limpieza de orejas, secado con aire y corte de uñas con cuidado especializado.'),
+(3, 'Baño premium con peinado', 60.00, 'Servicio completo con shampoo dermatológico, secado profesional, peinado y perfume hipoalergénico.'),
+(4, 'Guardería por día', 45.00, 'Cuidado diurno de la mascota en un entorno seguro, con juegos, alimentación y socialización.'),
+(5, 'Paquete de guardería (5 días)', 100.00, 'Paquete semanal de 5 días de guardería con actividades recreativas, alimentación y monitoreo fotográfico diario a través de la plataforma SIMBA.'),
+(6, 'Spa relajante', 70.00, 'Baño con aromaterapia, masaje antiestrés y cepillado profundo. Ideal para mascotas que necesitan relajación.'),
+(7, 'Prueba', 14000.00, '1huasdbjak');
 
 -- --------------------------------------------------------
 
@@ -258,7 +260,8 @@ INSERT INTO `usuario` (`idusu`, `idper`, `nomusu`, `apeusu`, `emausu`, `telusus`
 (10, 1, 'Thomas', 'Mosquera', 'thomasmosquerapedrazaa@gmail.com', '3168820833', 'Calle 13 #5-02', '$2y$10$4rqEF9h3oZ2y5jsQYi/CNejzkKJx7487fEVc.8YbEQ3TIPHypD5Wm', '1032938133'),
 (11, 1, 'Yilbert', 'Jimenez', 'yilbertprog21@gmail.com', '3232872968', 'Calle 123', '$2y$10$tQf325C7j1/n.fqzYSzwNOXrDqgRoIU1.cFLslcsr72dOgwPZ/ETG', '1076737473'),
 (12, 1, ' Mayra', 'Cuchumbe', 'malexacc10@gmail.com', '3208091583', 'Madrid, Cundinamarca ', '$2y$10$ZhUeFFBv2F2en3x2Y5ASmuSqq1JLyXZptBkwTxu7HgChwKRBLm6mi', '1007155164'),
-(13, 2, 'Alberto', 'Rodriguez', 'alberto.cuidador@gmai.com', '1111111111', 'AAAAAAAA', '$2y$10$WGGWiXuXlMkOjX3T2EgH9uC3n8oJL1AfEmGkUXzFuesA9vTp6lzDO', '00000001');
+(13, 2, 'Alberto', 'Rodriguez', 'alberto.cuidador@gmai.com', '1111111111', 'AAAAAAAA', '$2y$10$WGGWiXuXlMkOjX3T2EgH9uC3n8oJL1AfEmGkUXzFuesA9vTp6lzDO', '00000001'),
+(14, 1, 'Santiago', 'Silva', 'santisilpicr7@gmail.com', '3202480386', 'Calle 123', '$2y$10$uAr3XUIODk7wE1p543SuPO6kKJizZoEq2/t/mpi1xxnNw/RCx/HpC', '1076241831');
 
 -- --------------------------------------------------------
 
@@ -344,7 +347,8 @@ ALTER TABLE `serres`
 -- Indices de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  ADD PRIMARY KEY (`idser`);
+  ADD PRIMARY KEY (`idser`),
+  ADD UNIQUE KEY `nomser` (`nomser`);
 
 --
 -- Indices de la tabla `usuario`
@@ -369,7 +373,7 @@ ALTER TABLE `usunot`
 -- AUTO_INCREMENT de la tabla `emergencia`
 --
 ALTER TABLE `emergencia`
-  MODIFY `idemer` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idemer` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `evidencia`
@@ -393,7 +397,7 @@ ALTER TABLE `notificacion`
 -- AUTO_INCREMENT de la tabla `pagina`
 --
 ALTER TABLE `pagina`
-  MODIFY `idpag` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idpag` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `perfil`
@@ -405,7 +409,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de la tabla `pxp`
 --
 ALTER TABLE `pxp`
-  MODIFY `idpxp` bigint(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpxp` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `reserva`
@@ -423,13 +427,13 @@ ALTER TABLE `serres`
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `idser` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idser` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusu` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idusu` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `usunot`
